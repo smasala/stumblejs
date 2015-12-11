@@ -21,6 +21,12 @@
             me.initLogger();
         }
         
+        /**
+         * until the manifest is widely support, load the manifest json file with synchronous ajax!
+         * @method _loadManifest
+         * @private
+         * @return {Boolean}
+         */
         _loadManifest() {
             var me = this,
                 manifest = document.querySelector( "[rel='manifest']" ),
@@ -51,6 +57,10 @@
             return true;
         }
         
+        /**
+         * set any manifest defaults or load particular properties
+         * @method initManifestConfig
+         */
         initManifestConfig() {
             var me = this;
             if ( !me.manifest.hasOwnProperty( "batchTimer" ) ) {
@@ -58,6 +68,10 @@
             }
         }
         
+        /**
+         * called by the constructor, sets all the cogs in motion
+         * @method initLogger
+         */
         initLogger() {
             var me = this;
             if ( me._loadManifest() ) {
@@ -67,6 +81,11 @@
             }
         }
         
+        /**
+         * Send the error array batch via ajax to the server
+         * @method sendError
+         * @param errors {Array of Objects}
+         */
         sendError( errors ) {
             var me = this;
             if ( !me.manifest.url ) {
@@ -86,11 +105,22 @@
             } ) );
         }
         
+        /**
+         * check whether more time has passed than the batchTime requires
+         * @method isTimeToSend
+         * @param currentTime {Integer}
+         * @return {Boolean}
+         */
         isTimeToSend( currentTime ) {
             var me = this;
             return ( currentTime - me.startTimer ) >= me.manifest.batchTimer;
         }
         
+        /**
+         * return the function used by the window.onerror listener
+         * @method getErrorFunc
+         * @return {Function}
+         */
         getErrorFunc() {
             var me = this;
             return function() {
@@ -98,6 +128,7 @@
                 if ( !me.manifest.silent ) {
                     console.error( "StumbleJS", arguments );
                 }
+                //populate error array
                 me.errors.push( {
                     type: "error",
                     error: arguments[ 0 ],
@@ -108,6 +139,7 @@
                 } );
                 if ( !me.startTimer ) {
                     me.startTimer = currentTime;
+                    //send the error batch only when needed and not for each error
                     window.setTimeout( function() {
                         var time;
                         if ( me.isTimeToSend( new Date().getTime() ) ) {
@@ -123,6 +155,7 @@
         }
     }
 
+    //Here she goes!
     new Stumble();
     
 })( window );

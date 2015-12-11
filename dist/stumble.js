@@ -28,6 +28,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             me.initLogger();
         }
 
+        /**
+         * until the manifest is widely support, load the manifest json file with synchronous ajax!
+         * @method _loadManifest
+         * @private
+         * @return {Boolean}
+         */
+
         _createClass(Stumble, [{
             key: "_loadManifest",
             value: function _loadManifest() {
@@ -59,6 +66,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 me.manifest = content.stumblejs;
                 return true;
             }
+
+            /**
+             * set any manifest defaults or load particular properties
+             * @method initManifestConfig
+             */
+
         }, {
             key: "initManifestConfig",
             value: function initManifestConfig() {
@@ -67,6 +80,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     me.manifest.batchTimer = 200;
                 }
             }
+
+            /**
+             * called by the constructor, sets all the cogs in motion
+             * @method initLogger
+             */
+
         }, {
             key: "initLogger",
             value: function initLogger() {
@@ -77,6 +96,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     console.info("Stumble JS Intialised!");
                 }
             }
+
+            /**
+             * Send the error array batch via ajax to the server
+             * @method sendError
+             * @param errors {Array of Objects}
+             */
+
         }, {
             key: "sendError",
             value: function sendError(errors) {
@@ -98,12 +124,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     stumblejs: errors
                 }));
             }
+
+            /**
+             * check whether more time has passed than the batchTime requires
+             * @method isTimeToSend
+             * @param currentTime {Integer}
+             * @return {Boolean}
+             */
+
         }, {
             key: "isTimeToSend",
             value: function isTimeToSend(currentTime) {
                 var me = this;
                 return currentTime - me.startTimer >= me.manifest.batchTimer;
             }
+
+            /**
+             * return the function used by the window.onerror listener
+             * @method getErrorFunc
+             * @return {Function}
+             */
+
         }, {
             key: "getErrorFunc",
             value: function getErrorFunc() {
@@ -113,6 +154,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (!me.manifest.silent) {
                         console.error("StumbleJS", arguments);
                     }
+                    //populate error array
                     me.errors.push({
                         type: "error",
                         error: arguments[0],
@@ -123,6 +165,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     });
                     if (!me.startTimer) {
                         me.startTimer = currentTime;
+                        //send the error batch only when needed and not for each error
                         window.setTimeout(function () {
                             var time;
                             if (me.isTimeToSend(new Date().getTime())) {
@@ -140,6 +183,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         return Stumble;
     })();
+
+    //Here she goes!
 
     new Stumble();
 })(window);
