@@ -1,3 +1,8 @@
+v0.5.2
+----------------------------
+* add time property to error
+* add "silent" property to stop error messages being shown in the console and silently sent
+
 v0.5.0
 ----------------------------
 * submit errors in batches

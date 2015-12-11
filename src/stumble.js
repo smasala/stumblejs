@@ -1,7 +1,7 @@
 /**
 * Stumble JS - JavaScript Event Logger and Monitor
 * @Author Steven Masala <me@smasala.com>
-* @version 0.5.0
+* @version 0.5.2
 */
 
 (function( window ) {
@@ -15,7 +15,6 @@
             //properties
             me.manifest = null;
             me.errors = [];
-            me.batchTimer = 200;
             me.startTimer = 0;
             
             //Init
@@ -54,8 +53,8 @@
         
         initManifestConfig() {
             var me = this;
-            if ( me.manifest.hasOwnProperty( "batchTimer" ) ) {
-                me.batchTimer = me.manifest.batchTimer;
+            if ( !me.manifest.hasOwnProperty( "batchTimer" ) ) {
+                me.manifest.batchTimer = 200;
             }
         }
         
@@ -89,30 +88,35 @@
         
         isTimeToSend( currentTime ) {
             var me = this;
-            return ( currentTime - me.startTimer ) >= me.batchTimer;
+            return ( currentTime - me.startTimer ) >= me.manifest.batchTimer;
         }
         
         getErrorFunc() {
             var me = this;
             return function() {
                 var currentTime = new Date().getTime();
-                console.error( "Error", arguments );
+                if ( !me.manifest.silent ) {
+                    console.error( "StumbleJS", arguments );
+                }
                 me.errors.push( {
                     type: "error",
                     error: arguments[ 0 ],
                     where: arguments[ 1 ],
                     row: arguments[ 2 ],
+                    time: currentTime,
                     all: arguments
                 } );
                 if ( !me.startTimer ) {
                     me.startTimer = currentTime;
                     window.setTimeout( function() {
+                        var time;
                         if ( me.isTimeToSend( new Date().getTime() ) ) {
+                            time = me.startTimer;
                             me.startTimer = 0;
-                            me.sendError( me.errors );
+                            me.sendError( me.errors, time );
                             me.errors = [];
                         }
-                    }, me.batchTimer );
+                    }, me.manifest.batchTimer );
                 }
                 return true;
             };
