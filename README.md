@@ -18,3 +18,7 @@ Insert the following tags. Make sure they are placed before any other JS runs.
             "url": "myserver/error"
         }
     } 
+    
+## Contributions
+
+Please use the development environment when contributing to this project ``npm install && grunt dev``. Thank you.
