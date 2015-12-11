@@ -2,7 +2,7 @@
 
 JavaScript error logger and monitor. 
 
-All JavaScript errors are caught and sent via ajax to be logged on the server.
+All JavaScript errors are caught and sent via ajax (batch-wise) so that they can be logged server-side
 
 ## Getting Started
 
@@ -13,7 +13,7 @@ All JavaScript errors are caught and sent via ajax to be logged on the server.
 	npm install stumblejs
 
 ### Finally
-Insert the following tags. Make sure they are placed before any other JS runs.
+Insert the following tags. Place the following tags before any JavaScript is executed.
 
     <link rel="manifest" type="application/manifest+json" href="manifest.json" />
 	<script src="bower_components/stumblejs/dist/stumble.js"></script>
