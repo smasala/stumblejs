@@ -1,7 +1,7 @@
 /**
 * Stumble JS - JavaScript Event Logger and Monitor
 * @Author Steven Masala <me@smasala.com>
-* @version 0.1.0
+* @version 0.5.0
 */
 
 (function( window ) {
@@ -14,6 +14,9 @@
             var me = this;
             //properties
             me.manifest = null;
+            me.errors = [];
+            me.batchTimer = 200;
+            me.startTimer = 0;
             
             //Init
             me.initLogger();
@@ -49,15 +52,23 @@
             return true;
         }
         
+        initManifestConfig() {
+            var me = this;
+            if ( me.manifest.hasOwnProperty( "batchTimer" ) ) {
+                me.batchTimer = me.manifest.batchTimer;
+            }
+        }
+        
         initLogger() {
             var me = this;
             if ( me._loadManifest() ) {
+                me.initManifestConfig();
                 window.onerror = me.getErrorFunc();
                 console.info( "Stumble JS Intialised!" );
             }
         }
         
-        sendError() {
+        sendError( errors ) {
             var me = this;
             if ( !me.manifest.url ) {
                 console.warn( "Unable to POST error, no url set", me.manifest  );
@@ -72,22 +83,37 @@
                 }
             };
             xhrObj.send( window.JSON.stringify( {
-                stumblejs: {
-                    type: "error",
-                    error: arguments[ 0 ],
-                    where: arguments[ 1 ],
-                    row: arguments[ 2 ],
-                    all: arguments
-                }
+                stumblejs: errors
             } ) );
-            
+        }
+        
+        isTimeToSend( currentTime ) {
+            var me = this;
+            return ( currentTime - me.startTimer ) >= me.batchTimer;
         }
         
         getErrorFunc() {
             var me = this;
             return function() {
+                var currentTime = new Date().getTime();
                 console.error( "Error", arguments );
-                me.sendError.apply( me, arguments );
+                me.errors.push( {
+                    type: "error",
+                    error: arguments[ 0 ],
+                    where: arguments[ 1 ],
+                    row: arguments[ 2 ],
+                    all: arguments
+                } );
+                if ( !me.startTimer ) {
+                    me.startTimer = currentTime;
+                    window.setTimeout( function() {
+                        if ( me.isTimeToSend( new Date().getTime() ) ) {
+                            me.startTimer = 0;
+                            me.sendError( me.errors );
+                            me.errors = [];
+                        }
+                    }, me.batchTimer );
+                }
                 return true;
             };
         }

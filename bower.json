@@ -1,7 +1,7 @@
 {
 	"name": "stumblejs",
 	"description": "JavaScript error logger and monitor",,
-	"version": "0.1.0",
+	"version": "0.5.0",
 	"license": "MIT",
 	"homepage": "https://github.com/smasala/stumblejs",
 	"main": "dist/stumble.js",
