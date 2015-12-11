@@ -8,7 +8,7 @@ All JavaScript errors are caught and sent via ajax (batch-wise) so that they can
 
 ### Installation
 #### Bower
-    bower install stumbejs
+    bower install stumblejs
 #### NPM
 	npm install stumblejs
 
