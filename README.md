@@ -28,7 +28,7 @@ Insert the following tags. Make sure they are placed before any other JS runs.
     } 
     
 * `url`: string, server address to send error messages
-* `batchTimer`: integer, how often (ms) you wish to send a batch of errors [default=200]
+* `batchTimer`: integer [default=200], how often (ms) you wish to send a batch of errors 
 * `silent`: boolean [default=false], sent true to prevent console.error logs
     
 ## Contributions
