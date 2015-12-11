@@ -1,0 +1,4 @@
+v0.5.0
+----------------------------
+* submit errors in batches
+** property "batchTimer" in manifest.json to configure how often these batches are fired
