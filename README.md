@@ -6,6 +6,13 @@ All JavaScript errors are caught and sent via ajax to be logged on the server.
 
 ## Getting Started
 
+### Installation
+#### Bower
+    bower install stumbejs
+#### NPM
+	npm install stumblejs
+
+### Finally
 Insert the following tags. Make sure they are placed before any other JS runs.
 
     <link rel="manifest" href="manifest.json" />
