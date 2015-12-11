@@ -1,0 +1,17 @@
+{
+	"name": "stumblejs",
+	"description": "JavaScript error logger and monitor",,
+	"version": "0.1.0",
+	"license": "MIT",
+	"homepage": "https://github.com/smasala/stumblejs",
+	"main": "dist/stumble.js",
+	"ignore": [""],
+	"authors": [
+		"Steven Masala"
+	],
+	"keywords" : [ 
+		"javascript",
+		"error",
+		"log"
+	]
+}
