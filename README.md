@@ -1,6 +1,8 @@
 ## Stumble JS
 
-JavaScript error logger. Monitor all JavaScript errors and send them via ajax to be recorded on a server side log
+JavaScript error logger and monitor. 
+
+All JavaScript errors are caught and sent via ajax to be logged on the server.
 
 ## Getting Started
 
